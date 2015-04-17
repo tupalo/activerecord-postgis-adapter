@@ -136,6 +136,13 @@ module ActiveRecord  # :nodoc:
           ::RGeo::WKRep::WKBParser.new(@factory_generator, support_ewkb: true).parse(value) rescue nil
         end
 
+        def marshal_dump
+          [@factory_generator.receiver, @factory_generator.name]
+        end
+
+        def marshal_load(data)
+          data[0].method(data[1])
+        end
       end
 
       PostgreSQLAdapter::OID.register_type('geometry', SpatialOID.new(nil))
